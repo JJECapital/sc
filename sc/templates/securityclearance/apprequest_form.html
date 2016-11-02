@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Add New Application Request</h1>
+<!--	<form action="" method="post" enctype='multipart/form-data'>{% csrf_token %}
+	<div>
+	    {{ form.as_p }}
+	    <input type="submit" value="Save" />
+	</div>
+	</form>
+-->
+{% if not request.user.groups.all.first|splitrole:"-" == 'read' %}
+
+	New Request ID: <b>{{ request.GET.reference }}</b>
+	<div class="create-form">
+		<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	        <table class="apprequest-form">
+			        {{ form.reference.as_hidden }}
+			        {{ form.email.as_hidden }}
+			        {{ form.name.as_hidden }}
+			        {{ form.customer.as_hidden }}
+				<tr></tr>
+		        <tr><td class="form"></td><td class="form"></td><td class="form"></td></tr>
+		        <tr>
+			        <td class="form">{{ form.vendor.label_tag }} {{ form.vendor }}</td>
+			        <td class="form">{{ form.app.label_tag }} {{ form.app }}</td>
+			        <td class="form">{{ form.version.label_tag }} {{ form.version }}</td>
+			    </tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr>
+			        <td class="form">{% autoescape off %}{{ form.os.label_tag|upper }}{% endautoescape %} {{ form.os }}</td>
+			        <td class="form">{% autoescape off %}{{ form.package_type.label_tag|capitalise }}{% endautoescape %} {{ form.package_type }}</td>
+			        <td class="form">{{ form.complexity.label_tag }} {{ form.complexity }}</td>
+		        </tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr></tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr>
+			        <td class="form">{{ form.assigned.label_tag }} {{ form.assigned }}</td>
+			        <td class="form">{{ form.priority.label_tag }} {{ form.priority }}</td>
+			        <td class="form">{{ form.status.label_tag }} {{ form.status }}</td>
+		        </tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr></tr>
+	    	</table>
+	    	<div class="thirteen"><br>
+		        &nbsp;&nbsp;{{ form.comments.label_tag }}{{ form.comments }}<br><br>
+		    </div><br>
+	    	<div class="thirteen"><br>
+		        &nbsp;&nbsp;{{ form.attachment.label_tag }}{{ form.attachment }}<br><br>
+		    </div><br>
+	    	    <input type="submit" value="Save" /></span>
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'apprequests' %}">Back To All Apps</a>
+
+	        <div class="apprequest-left">
+	        </div>
+	        <div class="apprequest-center">
+	        </div>
+	        <div class="apprequest-right">
+    	    </div>
+		</form>
+	</div>
+
+
+
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+
+{% else %}
+	You are not allowed to create new application requests.
+{% endif %}
+
+
+{% endblock %}

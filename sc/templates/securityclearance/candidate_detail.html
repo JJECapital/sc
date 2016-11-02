@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	| <a href="{% url 'candidates' %}">Back to candidates list</a>
+	<h3>{{ candidate.name|capfirst }}</h3>
+	<h4>Email:</h4>
+	<p>{{ candidate.email }}</p>
+	<h4>Phone:</h4>
+	<p>{{ candidate.phone }}</p>
+{% endblock %}

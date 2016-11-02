@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+	| <a href="{% url 'candidates' %}">Back to candidate list</a>
+	<h1>Add new candidate</h1>
+		<form method='POST' action=''> {% csrf_token %}
+			{{ candidate.as_p }}
+			<input type='submit'>
+		</form>
+
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+
+{% endblock %}

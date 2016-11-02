@@ -1,0 +1,118 @@
+{% load staticfiles %}
+{% load sc_templatetags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>JJE</title>
+	<meta name="description" content="">
+	<link rel="stylesheet" type="text/css" href="{% static 'securityclearance/main.css' %}">
+</head>
+<body>
+	{% if user.is_anonymous %}
+
+	<div class="jje-appreq">
+		<img src="{% static 'securityclearance/jje-appreq.jpg' %}"/>
+	</div>
+
+	<div class="main-menu">
+		<a class="main-menu" href="http://jjecapital.com" target="_blank">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a class="main-menu" href="http://jjecapital.com/about" target="_blank">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a class="main-menu" href="http://jjecapital.com/the-team" target="_blank">The Team</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a class="main-menu" href="http://jjecapital.com/services" target="_blank">Services</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a class="main-menu" href="http://jjecapital.com/contact" target="_blank">Contact</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a class="main-menu" href="http://jjecapital.com/careers" target="_blank">Careers</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a class="main-menu" href="http://jjecapital.com/blog" target="_blank">Blog</a>
+	</div>
+
+	<a class="login-menu" href="{% url 'django.contrib.auth.views.login' %}">Click To Login</a>
+	{% else %}
+	<div class="user-customer">
+		<!--{{ user }}-->
+		{{ request.user.first_name }} {{ request.user.last_name }}
+		&nbsp;&nbsp;|&nbsp;&nbsp;{{ request.user.groups.all.first|splitcustomer:"-" }}
+		<!--&nbsp;&nbsp;&nbsp;&nbsp;{{ request.user.groups.all.first|splitrole:"-" }}-->
+	</div>	
+	<div class="top-menu">
+		<a href="{% url 'index' %}">Home</a>&nbsp;&nbsp;|
+		<a href="{% url 'django.contrib.auth.views.logout' %}">&nbsp;Logout</a>
+	</div>
+
+	<div class="menu">
+		<div class="jje-appreq-small">
+			<img src="{% static 'securityclearance/jje-appreq-small.png' %}"/>
+		</div>
+		<div class="main-menu-with-logo">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="main-menu" href="http://jjecapital.com/about" target="_blank">About</a>&nbsp;&nbsp;|&nbsp;
+			<a class="main-menu" href="http://jjecapital.com/the-team" target="_blank">The Team</a>&nbsp;&nbsp;|&nbsp;
+			<a class="main-menu" href="http://jjecapital.com/services" target="_blank">Services</a>&nbsp;&nbsp;|&nbsp;
+			<a class="main-menu" href="http://jjecapital.com/contact" target="_blank">Contact</a>&nbsp;&nbsp;|&nbsp;
+			<a class="main-menu" href="http://jjecapital.com/careers" target="_blank">Careers</a>&nbsp;&nbsp;|&nbsp;
+			<a class="main-menu" href="http://jjecapital.com/blog" target="_blank">Blog</a>
+		</div>
+		{% if request.user.groups.all.first|splitcustomer:"-" == 'Dell' %}
+		<div class="blue-bar">
+		</div>
+		<div class="customer-logo-small">
+			<img src="{% static 'securityclearance/dell-logo-small.jpg' %}"/>
+		</div>
+		{% elif request.user.groups.all.first|splitcustomer:"-" == 'DimensionData' %}
+		<div class="green-bar">
+		</div>
+		<div class="customer-logo-small">
+			<img src="{% static 'securityclearance/dd-logo-small.jpg' %}"/>
+		</div>
+		{% elif request.user.groups.all.first|splitcustomer:"-" == 'APaaS' %}
+		<div class="black-bar">
+		</div>
+		<div class="customer-logo-small">
+			<img src="{% static 'securityclearance/jje-logo-small.jpg' %}"/>
+		</div>		
+		{% else %}
+		<div class="black-bar">
+		</div>
+		<div class="customer-logo-small">
+			<img src="{% static 'securityclearance/jje-logo-small.jpg' %}"/>
+		</div>		
+		{% endif %}
+	</div>
+
+	<!--<a href="{% url 'jobs' %}">Jobs</a> | -->
+	<!--<a href="{% url 'candidates' %}">Candidates</a> | -->
+	<div class="menu-buttons">
+	{% if request.user.groups.all %}
+	{% with apprequest.reference|plusone|slice:"1:2"|join:""|stripzeros|add:"0" as ref %}
+	<a href="{% url 'apprequest_create' %}/?name={{ request.user.first_name }} {{ request.user.last_name }}&email={{ user }}&customer={{ request.user.groups.all.first|splitcustomer:'-' }}&reference={% plusone ref request.user.groups.all.first|splitcustomer:'-' %}">
+		<!--<div class="apprequest-icon">--><img src="{% static 'securityclearance/request.png' %}" /><!--</div>-->
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</a>
+	{% endwith %}
+	{% else %}
+	<a href="{% url 'apprequest_create' %}">
+		<!--<div class="apprequest-icon">--><img src="{% static 'securityclearance/request.png' %}" /><!--</div>-->
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</a>		
+	{% endif %}
+	<a href="{% url 'apprequests' %}">
+		<!--<div class="apptracker-icon">--><img src="{% static 'securityclearance/tracker.png' %}" /><!--</div>-->
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</a>
+	<a href="{% url 'summary' %}">
+		<!--<div class="summary-icon">--><img src="{% static 'securityclearance/summary.png' %}" /><!--</div>-->
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</a>
+	<a href="{% url 'docs' %}">
+		<!--<div class="docs-icon">--><img src="{% static 'securityclearance/docs.png' %}" /><!--</div>-->
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</a>	
+	{% endif %}
+	</div>
+	<div class="content">
+		{% block content %}
+		{% endblock content %}
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Tracker Summary</h1>
+	<div class="summary">
+		<table class="apprequest-detail">
+			<tr><td>Total Application Requests:</td><td><b>
+			{{ apprequests.count }}
+			</b></td></tr>
+			<tr><td>In Packaging:</td><td><b>{{ packaging.count }}</b></td></tr>
+			<tr><td>In UAT:</td><td><b>{{ uat.count }}</b></td></tr>
+			<tr><td>Completed:</td><td><b>{{ completed.count }}</b></td></tr>
+			<tr><td>Submitted:</td><td><b>{{ submitted.count }}</b></td></tr>
+			<tr><td>Cancelled:</td><td><b>{{ cancelled.count }}</b></td></tr>
+		</table>
+	</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1>{{ apprequest.vendor }} {{ apprequest.app|capfirst }} {{ apprequest.version }}</h1>
+	<div class="apprequest-detail">
+	<table class="apprequest-detail">
+		<tr>
+			<td><b>Name:</b></td><td>{{ apprequest.name }}</td>
+		</tr>
+		<tr>
+			<td><b>Email:</b></td><td>{{ apprequest.email }}</td>
+		</tr>
+		<!--<tr>
+			<td><b>Phone:</b></td><td>{{ apprequest.phone }}</td>
+		</tr>-->
+		<tr>
+			<td><b>OS:</b></td><td>{{ apprequest.os }}</td>
+		</tr>
+		<tr>
+			<td><b>Package Type:</b></td><td>{{ apprequest.package_type }}</td>
+		</tr>
+		<tr>
+			<td><b>Complexity:</b></td><td>{{ apprequest.complexity }}</td>
+		</tr>
+		<tr>
+			<td><b>Priority:</b></td><td>{{ apprequest.priority }}</td>
+		</tr>
+		<tr>
+			<td><b>Status:</b></td><td>{{ apprequest.status }}</td>
+		</tr>
+		<tr>
+			<td><b>Date:</b></td><td>{{ apprequest.date|date:"Y-m-d" }}</td>
+		</tr>
+		<tr>
+		{% if apprequest.attachment %}
+			<td><b>Attachment:</b></td><td><a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/> {{ apprequest.attachment }}</a></td>
+		{% endif %}
+		</tr>	
+	</table>
+	</div>
+<!--	{% if apprequest.attachment %}
+		<img src='{{ apprequest.attachment.url }}' height="100" width="100" />
+	{% endif %}-->
+{% endblock %}

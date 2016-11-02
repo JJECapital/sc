@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h3>Candidates registered</h3>
+	<h2><a href="{% url 'candidate_add' %}">Add new candidate</a></h2>
+	<table>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Phone</th>
+		{% for candidate in candidates %}
+		<tr>
+			<td>
+				<a href="{% url 'candidate_detail' candidate.id %}">{{ candidate.name|capfirst }}</a>
+			</td>
+			<td>{{ candidate.email }}</td>
+			<td>{{ candidate.phone }}</td>
+			<td>
+				<a class="cancel" href="/candidate/{{ candidate.id }}/delete"><b>DEL</b></a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

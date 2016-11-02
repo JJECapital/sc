@@ -1,0 +1,395 @@
+body {
+	font-family: Arial;
+	font-size: 15px;
+}
+
+h3 {
+	font-size: 27px;
+	font-family: Arial;
+}
+
+h2 {
+	font-size: 23px;
+	font-family: Arial;
+}
+
+h1 {
+	font-size: 19px;
+	font-family: Arial;
+}
+
+ul {
+	list-style-type: none;
+}
+
+a, a:visited {
+	text-decoration: none;
+	font-family: Arial;
+	color: black;
+}
+a:hover {
+	text-decoration: none;
+	color: CadetBlue;
+}
+.success {
+	color: green;
+}
+
+.errorlist {
+	color: red;
+}
+
+.hovered {
+	opacity: .6;
+}
+
+th {
+	text-align: left;
+	height: 20px;
+	padding-right: 5px;
+	padding-left: 5px;
+	color: white;
+	font-weight: normal;
+	background: Cadetblue;
+}
+tr {
+	height: 15px;
+}
+table.apprequest-form {
+	border-collapse: collapse;
+}
+td.form {
+	padding-right: 5px;
+	padding-left: 5px;
+	text-align: right;
+	width: 222px;
+	font-size: 13px;
+	background: Gainsboro;
+}
+td.apptracker {
+	padding-right: 5px;
+	padding-left: 5px;
+	background: Gainsboro;
+}
+
+div.menu-buttons {
+	position: relative;
+	top: -30px;
+	left: 50px;
+}
+div.apprequest-icon {
+	position: relative;
+	left: 50px;
+}
+div.apptracker-icon {
+	position: relative;
+	left: 250px;
+}
+div.summary-icon {
+	position: relative;
+	left: 450px;
+}
+div.docs-icon {
+	position: relative;
+	left: 650px;
+}
+
+div.content {
+	position: relative;
+	top: -20px;
+	left: 50px;
+}
+
+div.user-customer {
+	position:relative;
+	top: 0px;
+	width: 750px;
+	text-align: right;
+}
+
+div.search-bar {
+	position:relative;
+	top: -20px;
+	width: 690px;
+	text-align: right;
+}
+
+div.top-menu {
+	position: relative;
+	left: 50px;
+	top: -17px;
+	font-family: Arial;
+	font-size: 15px;
+}
+div.mid-menu {
+	font-family: Arial;
+	font-size: 15px;
+}
+
+div.update-form {
+	position: relative;
+	top: 0px;
+}
+
+div.summary {
+	position: relative;
+	left: -8px;
+}
+
+#update-phone-label, #update-vendor-label, #update-app-label, #update-version-label, #update-os-label, #update-package_type-label, #update-complexity-label, #update-priority-label, #update-status-label, #update-assigned-label, #update-attachment-label, #update-comments-label, #update-customer-label, #update-name-label, #update-email-label {
+	font-family: Arial;
+	font-size: 13px;
+	position: relative;
+}
+#update-phone-label {
+	left: 401px;
+}
+#id_phone {
+	width: 95px;
+	position: relative;
+	left: 406px;
+}
+#update-vendor-label {
+	/*left: 26px;*/
+}
+#id_vendor {
+	width: 155px;
+	position: relative;
+	/*left: 31px;*/
+}
+#update-app-label {
+	/*left: 88px;*/
+}
+#id_app {
+	width: 120px;
+	position: relative;
+	/*left: 93px;*/
+}
+#update-version-label {
+	/*left: 136px;*/
+}
+#id_version {
+	position: relative;
+	width: 120px;
+	/*left: 141px;*/
+}
+#update-os-label {
+	/*left: 50px;*/
+}
+#id_os {
+	width: 161px;
+	position: relative;
+	/*left: 55px;*/
+}
+#update-package_type-label {
+	/*left: 60px;*/
+}
+#id_package_type {
+	width: 126px;
+	position: relative;
+	/*left: 65px;*/
+}
+#update-complexity-label {
+	/*left: 88px;*/
+}
+#id_complexity {
+	width: 126px;
+	position: relative;
+	/*left: 93px;*/
+}
+#update-assigned-label {
+	/*left: 13px;*/
+}
+#id_assigned {
+	width: 155px;
+	position: relative;
+	/*left: 18px;*/
+}
+#update-priority-label {
+	/*left: 58px;*/
+}
+#id_priority {
+	width: 125px;
+	position: relative;
+	/*left: 63px;*/
+}
+#update-status-label {
+	/*left: 114px;*/
+}
+#id_status {
+	width: 126px;
+	position: relative;
+	/*left: 119px;*/
+}
+#update-attachment-label {
+	left: 0px;
+}
+#id_attachment {
+	width: 400px;
+	position: relative;
+	left: 5px;
+}
+#update-comments-label {
+	left: 3px;
+}
+#id_comments {
+	width: 600px;
+	position: relative;
+	left: 10px;
+}
+#create-submit-button {
+	position: relative;
+	left: 150px;
+}
+#update-submit-button {
+	position: relative;
+	top: 60px;
+	left: -467px;
+}
+#update-name-label {
+	/*left: 86px;*/
+}
+#id_name {
+	width: 120px;
+	position: relative;
+	/*left: 91px;*/
+}
+#update-email-label {
+	/*left: 35px;*/
+}
+#id_email {
+	width: 155px;
+	position: relative;
+	/*left: 40px;*/
+}
+#update-customer-label {
+	/*left: 120px;*/
+}
+#id_customer {
+	width: 120px;
+	position: relative;
+	/*left: 125px;*/
+}
+
+
+div.login-form {
+	position: relative;
+	left: 205px;
+	top: 50px;
+}
+#id_username, #id_password {
+	font-family: Arial;
+	font-size: 15px;
+	width: 210px;
+}
+td.login-label {
+	font-family: Arial;
+	font-size: 15px;
+}
+a.login-menu:link, a.login-menu:visited {
+	position: relative;
+	top: 20px;
+	left: 258px;
+	color: black;
+	font-family: Arial;
+	font-size: 15px;
+}
+a.login-menu:hover {
+	color: CadetBlue;
+}
+
+
+div.main-menu {
+	position: relative;
+	top: 50px;
+	left: 260px;
+}
+a.main-menu, a.main-menu:visited {
+	font-family: Arial;
+	font-size: 15px;
+	color: black;
+}
+a.main-menu:hover {
+	color: CadetBlue;
+}
+
+
+
+div.main-menu-with-logo {
+	position: relative;
+	top: -40px;
+	left: 160px;
+}
+a.main-menu-with-logo, a.main-menu-with-logo:visited {
+	font-family: Arial;
+	font-size: 15px;
+	color: black;
+}
+a.main-menu-with-logo:hover {
+	color: CadetBlue;
+}
+
+
+a.back-to-apps, a.back-to-apps:visited {
+	position: relative;
+	top: -380px;
+	left: 75px;
+	font-family: Arial;
+	font-size: 15px;
+	color: black;
+}
+a.back-to-apps:hover {
+	color: CadetBlue;
+}
+
+
+table.apprequest-detail {
+	font-family: Arial;
+	font-size: 13px;
+}
+div.apprequest-detail {
+	position: relative;
+	left: -8px;
+}
+
+div.apprequest-left {
+	position: relative;
+}
+div.apprequest-center {
+	position: relative;
+	top: -267px;
+	left: 250px;
+}
+div.apprequest-right {
+	position: relative;
+	top: -428px;
+	left: 500px;
+
+}
+
+div.thirteen {
+	font-size: 13px;
+	width: 696px;
+	background: Gainsboro;
+}
+
+div.jje-appreq-small {
+	position: relative;
+	top: -15px;
+	left: 20px;
+}
+
+div.customer-logo-small {
+	position: relative;
+	top: -87px;
+	left: 625px;
+}
+
+div.green-bar {
+	position: relative;
+	width: 402px;
+	height: 5px;
+	top: -30px;
+	left: 197px;
+	background: Limegreen;
+}

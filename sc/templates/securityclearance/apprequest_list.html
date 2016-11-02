@@ -1,0 +1,484 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+{% load staticfiles %}
+
+{% block content %}
+	<h1>Application Tracker</h1>
+		<form method='GET' action=''>
+			<!--<a href="{% url 'apprequest_create' %}/?name={{ request.user.first_name }} {{ request.user.last_name }}&email={{ user }}&customer={{ request.user.groups.all.first|splitcustomer:'-' }}">Add new request</a> |-->
+			<div class="mid-menu">
+				<a href="{% url 'myapprequests' %}">My Apps</a>&nbsp;&nbsp;|&nbsp;
+				<a href="{% url 'apprequests' %}">All Apps</a>&nbsp;&nbsp;|&nbsp;
+				<a href="{% url 'apprequests' %}/?assigned={{ user }}">Assigned to Me</a>&nbsp;&nbsp;|&nbsp;
+				<a href="{% url 'excel' %}">Export to Excel</a>&nbsp;&nbsp;|&nbsp;
+				<input type='submit' value='Search' />
+				<input type='text' name='search' placeholder='Vendor, App Name or ID' />
+			</div>
+			<br>
+			<div class="search-bar">
+			</div>
+		</form>
+	<table class="apprequest-detail">
+		<th>Reference</th>
+		<th>Vendor</th>
+		<th>Application</th>
+		<th>Version</th>
+		<th>Package Type</th>
+		<th>Date</th>
+		<th>Priority</th>
+		<th>Status</th>
+		<th>Requestor</th>
+		<th>Assigned</th>
+		<th>Attachment</th>
+		{% if request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+			<th>Customer</th>
+		{% endif %}
+		{% for apprequest in apprequests %}
+			{% if request.GET.vendor == apprequest.vendor or request.GET.search.lower in apprequest.vendor.lower %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.app == apprequest.app or request.GET.search.lower in apprequest.app.lower %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.assigned == apprequest.assigned or request.GET.search.lower in apprequest.assigned.lower %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.package_type == apprequest.package_type %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.date == apprequest.date|date:"Y-m-d" %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.status == apprequest.status %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.name == apprequest.name %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% elif request.GET.customer == apprequest.customer %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+
+			{% elif request.GET.priority == apprequest.priority %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+
+
+			{% elif not request.GET %}
+				{% if user.is_anonymous %}
+				{% else %}
+					{% if apprequest.customer == request.user.groups.all.first|splitcustomer:"-" %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+					</tr>
+					{% elif request.user.groups.all.first|splitcustomer:"-" == 'Global' %}
+					<tr>
+						{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+							<td class="apptracker"><a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% else %}
+							<td class="apptracker"><a href="{% url 'apprequest_update' apprequest.id %}">{{ apprequest.reference }}</a></td>
+						{% endif %}
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?vendor={{ apprequest.vendor }}">{{ apprequest.vendor|capfirst }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?app={{ apprequest.app }}">{{ apprequest.app|capfirst }}</a></td><td class="apptracker">{{ apprequest.version }}</td><td class="apptracker"><a href="{% url 'apprequests' %}/?package_type={{ apprequest.package_type }}">{{ apprequest.package_type }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?date={{ apprequest.date|date:"Y-m-d" }}">{{ apprequest.date|date:"Y-m-d" }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?priority={{ apprequest.priority }}">{{ apprequest.priority }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?status={{ apprequest.status }}">{{ apprequest.status }}</a></td><td class="apptracker"><a href="{% url 'apprequests' %}/?name={{ apprequest.name }}">{{ apprequest.name }}</a></td>
+						<td class="apptracker"><a href="{% url 'apprequest_assign' apprequest.id %}"><b>Assign</b> </a>{{ apprequest.assigned }}</td>
+						<td class="apptracker">
+						{% if apprequest.attachment %}
+							<!--<img src='{{ apprequest.attachment.url }}' height="20" width="20" />-->
+							<a href="{{ apprequest.attachment.url }}"><img src="{% static "securityclearance/word-thumbnail.png" %}"/></a>
+						{% endif %}
+						</td>
+						<td class="apptracker"><a href="{% url 'apprequests' %}/?customer={{ apprequest.customer }}">{{ apprequest.customer }}</a></td>
+					</tr>			
+					{% endif %}
+				{% endif %}
+			{% else %}		
+			{% endif %}
+		{% endfor %}
+	</ul>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+	<h1>Project Documents</h1><br>
+	<div class="docs">
+		<a href="{% static "securityclearance/Discovery Template.docx" %}" %}><img src="{% static "securityclearance/word-thumbnail.png" %}"/>&nbsp;Discovery Template</a>
+		<br>
+		<a href="{% static "securityclearance/MSI Packaging Standards & Best Practices v0.1.doc" %}" %}><img src="{% static "securityclearance/word-thumbnail.png" %}"/>&nbsp;MSI Packaging Standards & Best Practices v0.1</a>
+		<br>
+		<a href="{% static "securityclearance/MSI Packaging Standards & Best Practices v0.1.pdf" %}" %}><img src="{% static "securityclearance/pdf-thumbnail.png" %}"/>&nbsp;MSI Packaging Standards & Best Practices v0.1</a>		
+	</div>
+{% endblock %}

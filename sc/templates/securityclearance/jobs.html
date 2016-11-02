@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h3>Jobs on offer</h3>
+	<ul>
+		{% for job in jobs %}
+			<li>
+				<a href="{% url 'job_detail' job.id %}">
+					{{ job.title|capfirst }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

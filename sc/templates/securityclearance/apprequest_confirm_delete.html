@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Confirm Deletion</h1>
+
+	{% if user.is_anonymous %}
+	{% else %}
+		{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+			<p>Sorry, you're not allowed to delete this record!</p>
+		{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+			<p>Sorry, you're not allowed to delete this record!</p>
+		{% elif request.user.groups.all.first|splitrole:"-" == 'admin' %}
+			<p>Sorry, you're not allowed to delete this record!</p>
+			<!--<p>Are you sure you want to get rid of: "{{ apprequest.vendor }} {{ apprequest.app }} {{ apprequest.version }}"?</p>-->
+		{% else %}
+			<form method='POST' action=''> {% csrf_token %}
+				<input type="hidden" name="__confirm__" value="1" />
+				<input type='submit' value='Confirm' />
+			</form>
+		{% endif %}
+	{% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h3>Application Requests</h3>
+	<h2><a href="{% url 'apprequest_add' %}">Add new request</a></h2>
+	<table>
+		<th>Vendor</th>
+		<th>Application</th>
+		<th>Version</th>
+		<th>Package Type</th>
+		{% for apprequest in apprequests %}
+		<tr>
+			<td>{{ apprequest.vendor|capfirst }}</td>
+			<td>
+				<a href="{% url 'apprequest_detail' apprequest.id %}">{{ apprequest.app|capfirst }}</a>
+			</td>
+			<td>{{ apprequest.version|capfirst }}</td>
+			<td>{{ apprequest.packagetype|capfirst }}</td>
+			<td>
+				<a class="cancel" href="/apprequest/{{ apprequest.id }}/delete"><b>DEL</b></a>
+			</td>
+		</tr>
+		{% endfor %}
+	</ul>
+{% endblock %}

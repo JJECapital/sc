@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Update Request</h1><br>
+	{% if user.is_anonymous %}
+	{% else %}
+		{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+			<p>Sorry, you're not allowed to update this record!</p>
+		{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+		<div class="update-form">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+		        <table class="apprequest-form">
+			        <tr><td class="form"></td><td class="form"></td><td class="form"></td></tr>
+			        <tr>
+				        <td class="form">{{ form.vendor.label_tag }} {{ form.vendor }}</td>
+				        <td class="form">{{ form.app.label_tag }} {{ form.app }}</td>
+				        <td class="form">{{ form.version.label_tag }} {{ form.version }}</td>
+				    </tr>
+			        <tr>
+			        	<td class="form"></td><td class="form"></td><td class="form"></td>
+			        </tr>
+			        <tr>
+				        <td class="form">{% autoescape off %}{{ form.os.label_tag|upper }}{% endautoescape %} {{ form.os }}</td>
+				        <td class="form">{% autoescape off %}{{ form.package_type.label_tag|capitalise }}{% endautoescape %} {{ form.package_type }}</td>
+				        <td class="form">{{ form.complexity.label_tag }} {{ form.complexity }}</td>
+			        </tr>
+			        <tr>
+			        	<td class="form"></td><td class="form"></td><td class="form"></td>
+			        </tr>
+			        <tr></tr>
+			        <tr>
+			        	<td class="form"></td><td class="form"></td><td class="form"></td>
+			        </tr>
+			        <tr>
+				        <td class="form">{{ form.assigned.label_tag }} {{ form.assigned }}</td>
+				        <td class="form">{{ form.priority.label_tag }} {{ form.priority }}</td>
+				        <td class="form">{{ form.status.label_tag }} {{ form.status }}</td>
+			        </tr>
+			        <tr>
+			        	<td class="form"></td><td class="form"></td><td class="form"></td>
+			        </tr>
+			        <tr></tr>
+		    	</table>
+		    	<div class="thirteen"><br>
+			        &nbsp;&nbsp;{{ form.comments.label_tag }}{{ form.comments }}<br><br>
+			        &nbsp;&nbsp;{{ form.attachment.label_tag }}{{ form.attachment }}<br><br>
+			        <!--&nbsp;&nbsp;{{ form.reference.as_hidden }}<br><br>-->
+			    </div><br>
+		    	    <input type="submit" value="Update" />
+					&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'apprequests' %}">Back To All Apps</a>
+			</form>
+		</div>
+		{% else %}
+		<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+		<div class="update-form">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	        <table class="apprequest-form">
+		        <tr><td class="form"></td><td class="form"></td><td class="form"></td></tr>
+		        <tr>
+			        <td class="form">{{ form.vendor.label_tag }} {{ form.vendor }}</td>
+			        <td class="form">{{ form.app.label_tag }} {{ form.app }}</td>
+			        <td class="form">{{ form.version.label_tag }} {{ form.version }}</td>
+			    </tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr>
+			        <td class="form">{% autoescape off %}{{ form.os.label_tag|upper }}{% endautoescape %} {{ form.os }}</td>
+			        <td class="form">{% autoescape off %}{{ form.package_type.label_tag|capitalise }}{% endautoescape %} {{ form.package_type }}</td>
+			        <td class="form">{{ form.complexity.label_tag }} {{ form.complexity }}</td>
+		        </tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr></tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr>
+			        <td class="form">{{ form.assigned.label_tag }} {{ form.assigned }}</td>
+			        <td class="form">{{ form.priority.label_tag }} {{ form.priority }}</td>
+			        <td class="form">{{ form.status.label_tag }} {{ form.status }}</td>
+		        </tr>
+		        <tr>
+		        	<td class="form"></td><td class="form"></td><td class="form"></td>
+		        </tr>
+		        <tr></tr>
+	    	</table>
+	    	<div class="thirteen"><br>
+		        &nbsp;&nbsp;{{ form.comments.label_tag }}{{ form.comments }}<br><br>
+		        &nbsp;&nbsp;{{ form.attachment.label_tag }}{{ form.attachment }}<br><br>
+		        <!--&nbsp;&nbsp;{{ form.reference.as_hidden }}<br><br>-->
+		    </div><br>
+	    	    <input type="submit" value="Update" /></span>
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'apprequests' %}">Back To All Apps</a>
+			</form>
+		</div>
+		<br><br>
+			<!--<a class="cancel" href="/apprequest/{{ apprequest.id }}/delete"><b>DELETE REQUEST</b></a>-->
+		{% endif %}
+	{% endif %}
+
+{% endblock %}

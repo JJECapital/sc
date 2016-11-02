@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Assign Request</h1>
+
+	{% if user.is_anonymous %}
+	{% else %}
+		{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+			<p>Sorry, you're not allowed to assign this record!</p>
+		{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+		    Please click on a username below to reassign the <b>{{ apprequest.vendor }} {{ apprequest.app }} {{ apprequest.version }}</b> to someone in your organisation:<br>		    
+		    {% for a in assignees %}
+				<br>
+		    	<a href="{% url 'apprequest_update' apprequest.id %}/?assigned={{ a.email }}">{{ a.email }}</a>
+		    {% endfor %}
+		    <br><br>
+		    or choose from below to reassign to JJE:
+		    <br><br>
+		    <a href="{% url 'apprequest_update' apprequest.id %}/?assigned={{ 'operations@jjecapital.com' }}">Operations</a>
+		    <br>
+		    <a href="{% url 'apprequest_update' apprequest.id %}/?assigned={{ 'reporting@jjecapital.com' }}">Reporting</a>
+		    <br><br>
+		    <a href="{% url 'apprequests' %}">Cancel</a>
+		{% else %}
+		    Please click on a username below to reassign the <b>{{ apprequest.vendor }} {{ apprequest.app }} {{ apprequest.version }}</b> to someone in your organisation:<br>	
+		    {% for a in assignees %}
+		    	<br>
+		    	<a href="{% url 'apprequest_update' apprequest.id %}/?assigned={{ a.email }}">{{ a.email }}</a>
+		    {% endfor %}
+		    <br><br>
+		    or choose from below to reassign to JJE:
+		    <br><br>
+		    <a href="{% url 'apprequest_update' apprequest.id %}/?assigned={{ 'operations@jjecapital.com' }}">Operations</a>
+		    <br>
+		    <a href="{% url 'apprequest_update' apprequest.id %}/?assigned={{ 'reporting@jjecapital.com' }}">Reporting</a>
+		    <br><br>
+		    <a href="{% url 'apprequests' %}">Cancel</a>		{% endif %}
+	{% endif %}
+
+{% endblock %}

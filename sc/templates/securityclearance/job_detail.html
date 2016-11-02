@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+	| <a href="{% url 'jobs' %}">Back to job list</a>
+	<h3>{{ job.title|capfirst }}</h3>
+	<h4>Employer:</h4>
+	<p><a href="{{ job.url }}">{{ job.company }}</a></p>
+	<h4>Salary:</h4>
+	<p>{{ job.salary }} GBP</p>
+	<h4>Description:</h4>
+	<p>{{ job.description }}</p>
+	<h4>Required security clearance:</h4>
+	<p>{{ job.sc }}</p>
+	<h4>All candidates:</h4>
+	{% for c in candidates %}
+		{% if c != None %}
+			<p>{{ c.name }}</p>
+		{% endif %}
+	{% endfor %}
+{% endblock %}
