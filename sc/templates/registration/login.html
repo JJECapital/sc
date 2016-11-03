@@ -2,9 +2,26 @@
 
 {% block content %}
 {% if form.errors %}
-<p> Your username and password didn't match. Pleaste try again.</p>
-{% endif %}
-
+<div class="whiteblock-badpassword">
+<div class="badpassword"> Your username and password didn't match. Please try again.</div>
+<div class="login-form">
+	<form method="POST" action="{% url 'django.contrib.auth.views.login' %}">
+	{% csrf_token %}
+		<table>
+			<tr>
+				<td class="login-label">{{ form.username.label_tag }}</td>
+				<td class="login-field">{{ form.username }}</td>
+			</tr>
+			<tr>
+				<td class="login-label">{{ form.password.label_tag }}</td>
+				<td class="login-field">{{ form.password }}</td>
+			</tr>
+		</table>
+		<input type="submit" value="login" />
+		<input type="hidden" name="next" value="{{ next }}" />
+	</form>
+</div>
+{% else %}
 <div class="whiteblock-login">
 </div>
 <div class="login-form">
@@ -24,5 +41,8 @@
 		<input type="hidden" name="next" value="{{ next }}" />
 	</form>
 </div>
-
+<div class="trouble-logging-in">
+	Trouble logging in? Click <a href="mailto:operations@jjecapital.com?subject=Login issues">here.</a>
+</div>
+{% endif %}
 {% endblock %}

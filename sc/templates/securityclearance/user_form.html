@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Add New User</h1>
+
+{% if not request.user.groups.all.first|splitrole:"-" == 'admin' %}
+	You are not allowed to create new users!
+{% else %}
+
+	<form action="" method="post" enctype='multipart/form-data'>{% csrf_token %}
+	<div>
+	    {{ form.as_p }}
+	    <input type="submit" value="Save" />
+	</div>
+	</form>
+
+{% endif %}
+
+{% endblock %}
+

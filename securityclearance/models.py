@@ -77,7 +77,7 @@ class AppRequest(models.Model):
 		('Low', 'Low'),
 	)
 	priority = models.CharField(max_length=8, choices=PRIORITY_CHOICES, default='Low')
-	comments = models.CharField(max_length=256, default='', blank=True, null=True)
+	comments = models.TextField(default='', blank=True, null=True)
 	STATUS_CHOICES = (
 		('Submitted', 'Submitted'),
 		('Cancelled', 'Cancelled'),

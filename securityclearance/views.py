@@ -9,6 +9,7 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DeleteView
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import User
 
 from .models import Job
 from .models import Candidate
@@ -71,6 +72,38 @@ class LoggedInMixin(object):
 	@method_decorator(login_required)
 	def dispatch(self, *args, **kwargs):
 		return super(LoggedInMixin, self).dispatch(*args, **kwargs)
+
+class UserCreate(LoggedInMixin, CreateView):
+ 	model = User
+	template_name = 'securityclearance/user_form.html'
+	fields = ['username', 'password', 'email', 'first_name', 'last_name',]
+	def get_initial(self):
+		initial = super(CreateView, self).get_initial()
+		for k, v in self.request.GET.iterlists():
+			if len(v)>1:
+				initial.update({k:v})
+			else:
+				initial.update({k:v[0]})
+		return initial
+
+
+def user_success(request):
+	user = User.objects.all().last
+	return render(request, 'securityclearance/user_success.html', { 
+		'user': user,
+	})
+
+class UserDetail(LoggedInMixin, DetailView):
+	model = User
+	template_name = 'securityclearance/user_detail.html'
+	def get_context_data(self, **kwargs):
+		context = super(UserDetail, self).get_context_data(**kwargs)
+		try:
+			#context['apprequest'] = AppRequest.objects.get(id=self.kwargs['pk'], email=self.request.user)
+			context['user'] = User.objects.get(id=self.kwargs['pk'])
+			return context
+		except User.DoesNotExist:
+			raise Exception('You are not authorised to view this user')
 
 
 def index(request):
