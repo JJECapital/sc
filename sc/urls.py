@@ -38,6 +38,5 @@ urlpatterns = [
     url(r'^user/create', UserCreate.as_view(model=User, success_url='success'), name='user_create'),
     url(r'^group/success', views.group_success, name='group_success'),
     url(r'^group/create', GroupCreate.as_view(model=Group, success_url='success'), name='group_create'),
-#    url(r'^user/create', UserCreate.as_view(model=User, success_url=reverse_lazy('user_detail')), name='user_create'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

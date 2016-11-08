@@ -38,8 +38,8 @@
 		<a href="{% url 'index' %}">Home</a>&nbsp;&nbsp;|
 		<a href="{% url 'django.contrib.auth.views.logout' %}">&nbsp;Logout</a>
 		{% if request.user.groups.all.first|splitcustomer:"-" == 'Global' and request.user.groups.all.first|splitrole:"-" == 'admin' %}
-			<a href="{% url 'group_create' %}">&nbsp;|&nbsp;&nbsp;Add Group</a>
-			<a href="{% url 'user_create' %}">&nbsp;|&nbsp;&nbsp;Add User</a>
+			<a href="/group/create">&nbsp;|&nbsp;&nbsp;Add Group</a>
+			<a href="/user/create">&nbsp;|&nbsp;&nbsp;Add User</a>
 		{% endif %}
 	</div>
 

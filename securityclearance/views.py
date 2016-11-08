@@ -122,17 +122,6 @@ class UserDetail(LoggedInMixin, DetailView):
 			raise Exception('You are not authorised to view this user')
 
 
-def group_create(request):
-	model = Group
-	template_name = 'securityclearance/group_form.html'
-	group = GroupForm(request.POST or None)	
-	if group.is_valid():
-		save_it = group.save(commit=False)
-		save_it.save()
-		messages.success(request, 'Group created successfully.')
-	return render_to_response('securityclearance/group_form.html', locals(), context_instance=RequestContext(request))
-
-
 def index(request):
 	if request.user.is_authenticated():
 		group = request.user.groups.values_list('name',flat=True)[0]
