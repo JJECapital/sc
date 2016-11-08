@@ -31,12 +31,16 @@
 	<div class="user-customer">
 		<!--{{ user }}-->
 		{{ request.user.first_name }} {{ request.user.last_name }}
-		&nbsp;&nbsp;|&nbsp;&nbsp;{{ request.user.groups.all.first|splitcustomer:"-" }}
+		&nbsp;|&nbsp;&nbsp;{{ request.user.groups.all.first|splitcustomer:"-" }}
 		<!--&nbsp;&nbsp;&nbsp;&nbsp;{{ request.user.groups.all.first|splitrole:"-" }}-->
 	</div>	
 	<div class="top-menu">
 		<a href="{% url 'index' %}">Home</a>&nbsp;&nbsp;|
 		<a href="{% url 'django.contrib.auth.views.logout' %}">&nbsp;Logout</a>
+		{% if request.user.groups.all.first|splitcustomer:"-" == 'Global' and request.user.groups.all.first|splitrole:"-" == 'admin' %}
+			<a href="{% url 'group_create' %}">&nbsp;|&nbsp;&nbsp;Add Group</a>
+			<a href="{% url 'user_create' %}">&nbsp;|&nbsp;&nbsp;Add User</a>
+		{% endif %}
 	</div>
 
 	<div class="menu">
@@ -52,30 +56,13 @@
 			<a class="main-menu" href="http://jjecapital.com/careers" target="_blank">Careers</a>&nbsp;&nbsp;|&nbsp;
 			<a class="main-menu" href="http://jjecapital.com/blog" target="_blank">Blog</a>
 		</div>
-		{% if request.user.groups.all.first|splitcustomer:"-" == 'Dell' %}
-		<div class="blue-bar">
+		{% if request.user.groups.all.first|splitcustomer:"-" %}
+		<div class="{{ request.user.groups.all.first|splitcustomer:"-" }}-bar">
 		</div>
 		<div class="customer-logo-small">
-			<img src="{% static 'securityclearance/dell-logo-small.jpg' %}"/>
-		</div>
-		{% elif request.user.groups.all.first|splitcustomer:"-" == 'DimensionData' %}
-		<div class="green-bar">
-		</div>
-		<div class="customer-logo-small">
-			<img src="{% static 'securityclearance/dd-logo-small.jpg' %}"/>
-		</div>
-		{% elif request.user.groups.all.first|splitcustomer:"-" == 'APaaS' %}
-		<div class="black-bar">
-		</div>
-		<div class="customer-logo-small">
-			<img src="{% static 'securityclearance/jje-logo-small.jpg' %}"/>
-		</div>		
-		{% else %}
-		<div class="black-bar">
-		</div>
-		<div class="customer-logo-small">
-			<img src="{% static 'securityclearance/jje-logo-small.jpg' %}"/>
-		</div>		
+			<img src="/static/securityclearance/{{ request.user.groups.all.first|splitcustomer:"-" }}.jpg"/>	
+			<!--<img src="{% static 'securityclearance/JJECapital-logo-small.jpg' %}"/>-->
+		</div>	
 		{% endif %}
 	</div>
 

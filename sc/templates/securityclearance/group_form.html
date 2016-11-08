@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Add New Group</h1>
+
+{% if not request.user.groups.all.first|splitrole:"-" == 'admin' %}
+	You are not allowed to create new groups!
+{% else %}
+
+	<form action="" method="post" enctype='multipart/form-data'>{% csrf_token %}
+	<table class="user-form">
+	    <tr><td class='user-form'>{{ form.name.label_tag }}</td><td class='user-form'>{{ form.name }}</td></tr>
+	    <tr><td class='user-form'>{{ form.permissions.label_tag }}</td><td class='user-form'>{{ form.permissions }}</td></tr>
+	</table>
+	    <input type="submit" value="Save" />
+	</form>
+
+{% endif %}
+
+{% endblock %}
+

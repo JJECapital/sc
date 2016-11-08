@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from .models import AppRequest
 from .models import Candidate
@@ -12,6 +12,10 @@ class CandidateForm(ModelForm):
 		model = Candidate
 		fields = '__all__'
 
+class GroupForm(ModelForm):
+	class Meta:
+		model = Group
+		fields = '__all__'
 
 class AppRequestForm(ModelForm):
 	class Meta:

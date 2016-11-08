@@ -9,13 +9,11 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DeleteView
 from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
-from .models import Job
-from .models import Candidate
-from .models import AppRequest
-from .forms import AppRequestForm
-from .forms import CandidateForm
+from .models import Job, Candidate, AppRequest
+from .forms import AppRequestForm, CandidateForm, GroupForm
 
 import string
 
@@ -76,7 +74,7 @@ class LoggedInMixin(object):
 class UserCreate(LoggedInMixin, CreateView):
  	model = User
 	template_name = 'securityclearance/user_form.html'
-	fields = ['username', 'password', 'email', 'first_name', 'last_name',]
+	fields = ['username', 'password', 'email', 'first_name', 'last_name', 'groups']
 	def get_initial(self):
 		initial = super(CreateView, self).get_initial()
 		for k, v in self.request.GET.iterlists():
@@ -86,11 +84,29 @@ class UserCreate(LoggedInMixin, CreateView):
 				initial.update({k:v[0]})
 		return initial
 
+class GroupCreate(LoggedInMixin, CreateView):
+ 	model = Group
+	template_name = 'securityclearance/group_form.html'
+	fields = '__all__'
+	def get_initial(self):
+		initial = super(CreateView, self).get_initial()
+		for k, v in self.request.GET.iterlists():
+			if len(v)>1:
+				initial.update({k:v})
+			else:
+				initial.update({k:v[0]})
+		return initial
 
 def user_success(request):
 	user = User.objects.all().last
 	return render(request, 'securityclearance/user_success.html', { 
 		'user': user,
+	})
+
+def group_success(request):
+	group = Group.objects.all().last
+	return render(request, 'securityclearance/group_success.html', { 
+		'group': group,
 	})
 
 class UserDetail(LoggedInMixin, DetailView):
@@ -104,6 +120,17 @@ class UserDetail(LoggedInMixin, DetailView):
 			return context
 		except User.DoesNotExist:
 			raise Exception('You are not authorised to view this user')
+
+
+def group_create(request):
+	model = Group
+	template_name = 'securityclearance/group_form.html'
+	group = GroupForm(request.POST or None)	
+	if group.is_valid():
+		save_it = group.save(commit=False)
+		save_it.save()
+		messages.success(request, 'Group created successfully.')
+	return render_to_response('securityclearance/group_form.html', locals(), context_instance=RequestContext(request))
 
 
 def index(request):

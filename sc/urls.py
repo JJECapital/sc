@@ -2,11 +2,11 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from securityclearance import views
-from securityclearance.views import AppRequestList, AppRequestDetail, AppRequestUpdate, AppRequestDelete, AppRequestCreate, MyAppRequestList, AssignedAppRequestList, UserCreate, UserDetail
+from securityclearance.views import AppRequestList, AppRequestDetail, AppRequestUpdate, AppRequestDelete, AppRequestCreate, MyAppRequestList, AssignedAppRequestList, UserCreate, UserDetail, GroupCreate
 
 
 
@@ -36,6 +36,8 @@ urlpatterns = [
     url(r'^user/(?P<pk>\d+)/', UserDetail.as_view(), name='user_detail'),
     url(r'^user/success', views.user_success, name='user_success'),
     url(r'^user/create', UserCreate.as_view(model=User, success_url='success'), name='user_create'),
+    url(r'^group/success', views.group_success, name='group_success'),
+    url(r'^group/create', GroupCreate.as_view(model=Group, success_url='success'), name='group_create'),
 #    url(r'^user/create', UserCreate.as_view(model=User, success_url=reverse_lazy('user_detail')), name='user_create'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
