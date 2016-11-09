@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+
+{% block content %}
+	<h1>Update Request</h1><br>
+	{% if user.is_anonymous %}
+	{% else %}
+		{% if request.user.groups.all.first|splitrole:"-" == 'read' %}
+			<p>Sorry, you're not allowed to update this record!</p>
+		{% elif request.user.groups.all.first|splitrole:"-" == 'write' %}
+		<div class="update-form">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+				<table class="user-form">
+					<tr><td class="user-form">{{ form.username.label_tag }}</td><td class="user-form">{{ form.username }}</td></tr>
+					<tr><td class="user-form">{% autoescape off %}{{ form.email.label_tag|capitalise }}{% endautoescape %}</td><td class="user-form">{{ form.email }}</td></tr>
+					<tr><td class="user-form">{% autoescape off %}{{ form.first_name.label_tag|capitalise }}{% endautoescape %}</td><td class="user-form">{{ form.first_name|capitalise }}</td></tr>
+					<tr><td class="user-form">{% autoescape off %}{{ form.last_name.label_tag|capitalise }}{% endautoescape %}</td><td class="user-form">{{ form.last_name }}</td></tr>
+					<tr><td class="user-form">{{ form.groups.label_tag }}</td><td class="user-form">{{ form.groups }}</td></tr>
+				</table>
+ 		    	<input type="submit" value="Update" />
+			</form>
+		</div>
+		{% else %}
+		<div class="update-form">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+				<table class="user-form">
+					<tr><td class="user-form">{{ form.username.label_tag }}</td><td class="user-form">{{ form.username }}</td></tr>
+					<tr><td class="user-form">{% autoescape off %}{{ form.email.label_tag|capitalise }}{% endautoescape %}</td><td class="user-form">{{ form.email }}</td></tr>
+					<tr><td class="user-form">{% autoescape off %}{{ form.first_name.label_tag|capitalise }}{% endautoescape %}</td><td class="user-form">{{ form.first_name }}</td></tr>
+					<tr><td class="user-form">{% autoescape off %}{{ form.last_name.label_tag|capitalise }}{% endautoescape %}</td><td class="user-form">{{ form.last_name }}</td></tr>
+					<tr><td class="user-form">{{ form.groups.label_tag }}</td><td class="user-form">{{ form.groups }}</td></tr>
+				</table>
+	    	    <input type="submit" value="Update" />
+			</form>
+		</div>
+		<br><br>
+			<!--<a class="cancel" href="/apprequest/{{ apprequest.id }}/delete"><b>DELETE REQUEST</b></a>-->
+		{% endif %}
+	{% endif %}
+
+{% endblock %}

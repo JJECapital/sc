@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'securityclearance/main.css' %}">
 </head>
 <body>
-	{% if user.is_anonymous %}
+	{% if user.is_anonymous or not request.user.groups.all.first %}
 
 	<div class="jje-appreq">
 		<img src="{% static 'securityclearance/jje-appreq.jpg' %}"/>
@@ -40,6 +40,7 @@
 		{% if request.user.groups.all.first|splitcustomer:"-" == 'Global' and request.user.groups.all.first|splitrole:"-" == 'admin' %}
 			<a href="/group/create">&nbsp;|&nbsp;&nbsp;Add Group</a>
 			<a href="/user/create">&nbsp;|&nbsp;&nbsp;Add User</a>
+			<a href="/users/">&nbsp;|&nbsp;&nbsp;Edit Users</a>
 		{% endif %}
 	</div>
 

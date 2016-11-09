@@ -7,7 +7,6 @@
 {% if not request.user.groups.all.first|splitrole:"-" == 'admin' %}
 	You are not allowed to create new users!
 {% else %}
-
 	<form action="" method="post" enctype='multipart/form-data'>{% csrf_token %}
 	<table class="user-form">
 		<tr><td class='user-form'>{{ form.username.label_tag }}</td><td class='user-form'>{{ form.username }}</td></tr>
@@ -17,10 +16,8 @@
 	    <tr><td class='user-form'>{% autoescape off %}{{ form.last_name.label_tag|capitalise }}{% endautoescape %}</td><td class='user-form'>{{ form.last_name }}</td></tr>
 	    <tr><td class='user-form'>{{ form.groups.label_tag }}</td><td class='user-form'>{{ form.groups }}</td></tr>
 	</table>
-	<input type="submit" value="Save" />
-
+		<input type="submit" value="Save" />
 	</form>
-
 {% endif %}
 
 {% endblock %}

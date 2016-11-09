@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load sc_templatetags %}
+{% load staticfiles %}
+
+{% block content %}
+	<h1>List of Users</h1>
+
+	<table>
+	<th>Username</th>
+	<th>Group</th>
+	{% for u in users %}
+	<tr>
+		<td>
+			<a href="/user/{{ u.id }}/update/">{{ u }}</a><br>
+		</td>
+		<td>
+			{{ u.groups.last }}
+		</td>
+	</tr>
+	{% endfor %}
+
+{% endblock %}

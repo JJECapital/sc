@@ -13,7 +13,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
 from .models import Job, Candidate, AppRequest
-from .forms import AppRequestForm, CandidateForm, GroupForm
+from .forms import AppRequestForm, CandidateForm, UserForm
 
 import string
 
@@ -71,6 +71,33 @@ class LoggedInMixin(object):
 	def dispatch(self, *args, **kwargs):
 		return super(LoggedInMixin, self).dispatch(*args, **kwargs)
 
+def user_create(request):
+	user = UserForm(request.POST or None)	
+	if user.is_valid():
+		save_it = user.save(commit=False)
+		save_it.save()
+		messages.success(request, 'User added successfully.')
+	return render(request, 'securityclearance/user_form.html', {
+			'form': user,
+		})
+
+class UserUpdate(LoggedInMixin, UpdateView):
+	model = User
+	template_name = 'securityclearance/user_update.html'
+	fields = ['username', 'email', 'first_name', 'last_name', 'groups']
+	def get_context_data(self, **kwargs):
+		context = super(UserUpdate, self).get_context_data(**kwargs)
+		context['user'] = User.objects.get(id=self.kwargs['pk'])
+		return context
+	def get_initial(self):
+		initial = super(UpdateView, self).get_initial()
+		for k, v in self.request.GET.iterlists():
+			if len(v)>1:
+				initial.update({k:v})
+			else:
+				initial.update({k:v[0]})
+		return initial
+
 class UserCreate(LoggedInMixin, CreateView):
  	model = User
 	template_name = 'securityclearance/user_form.html'
@@ -121,11 +148,26 @@ class UserDetail(LoggedInMixin, DetailView):
 		except User.DoesNotExist:
 			raise Exception('You are not authorised to view this user')
 
+class UserList(LoggedInMixin, ListView):
+	model = User
+	template_name = 'securityclearance/user_list.html'
+	def get_queryset(self):
+		return User.objects.all()
+	def get_context_data(self, **kwargs):
+		context = super(UserList, self).get_context_data(**kwargs)
+		#context['apprequests'] = AppRequest.objects.filter(email=self.request.user)
+		context['users'] = User.objects.all()
+		return context
+
 
 def index(request):
 	if request.user.is_authenticated():
-		group = request.user.groups.values_list('name',flat=True)[0]
-		customer = splitcustomer(group, '-')
+		if request.user.groups.values_list():
+			group = request.user.groups.values_list('name',flat=True)[0]
+			customer = splitcustomer(group, '-')
+		else:
+			group = ''
+			customer = ''
 	else:
 		group = ''
 		customer = ''

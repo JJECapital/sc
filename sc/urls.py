@@ -5,8 +5,10 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
 
+#from securityclearance.forms import UserCreationForm
+
 from securityclearance import views
-from securityclearance.views import AppRequestList, AppRequestDetail, AppRequestUpdate, AppRequestDelete, AppRequestCreate, MyAppRequestList, AssignedAppRequestList, UserCreate, UserDetail, GroupCreate
+from securityclearance.views import AppRequestList, AppRequestDetail, AppRequestUpdate, AppRequestDelete, AppRequestCreate, MyAppRequestList, AssignedAppRequestList, UserCreate, UserUpdate, UserDetail, GroupCreate, UserList
 
 
 
@@ -33,9 +35,13 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^user/(?P<pk>\d+)/update', UserUpdate.as_view(success_url='sucess'), name='user_update'),
     url(r'^user/(?P<pk>\d+)/', UserDetail.as_view(), name='user_detail'),
+    url(r'^users', UserList.as_view(), name='users'),
     url(r'^user/success', views.user_success, name='user_success'),
-    url(r'^user/create', UserCreate.as_view(model=User, success_url='success'), name='user_create'),
+#    url(r'^user/create', UserCreate.as_view(model=User, success_url='success'), name='user_create'),
+    url(r'^user/create', views.user_create, name='user_create'),
+#    url(r'^user/create', (UserCreate.as_view(model=User, get_success_url =lambda: reverse('user_create'), form_class=UserCreationForm, template_name="securityclearance/user_form.html")), name='user_create'),
     url(r'^group/success', views.group_success, name='group_success'),
     url(r'^group/create', GroupCreate.as_view(model=Group, success_url='success'), name='group_create'),
     
