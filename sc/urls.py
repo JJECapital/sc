@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout'),
-    url(r'^user/(?P<pk>\d+)/update', UserUpdate.as_view(success_url='sucess'), name='user_update'),
+    url(r'^user/(?P<pk>\d+)/update', UserUpdate.as_view(success_url='success'), name='user_update'),
     url(r'^user/(?P<pk>\d+)/', UserDetail.as_view(), name='user_detail'),
     url(r'^users', UserList.as_view(), name='users'),
     url(r'^user/success', views.user_success, name='user_success'),
