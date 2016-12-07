@@ -435,7 +435,14 @@ div.Dell-bar {
 	left: 197px;
 	background: SteelBlue;
 }
-
+div.test-bar {
+	position: relative;
+	width: 402px;
+	height: 5px;
+	top: -30px;
+	left: 197px;
+	background: yellow;
+}
 div.APaaS-bar {
 	position: relative;
 	width: 402px;
